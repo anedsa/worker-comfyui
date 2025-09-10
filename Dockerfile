@@ -69,7 +69,6 @@ WORKDIR /
 RUN uv pip install runpod requests websocket-client
 
 # Add application code and scripts
-# Make sure to rename your Faceswap(1).json to workflow_api.json
 ADD src/start.sh handler.py workflow_api.json ./
 RUN chmod +x /start.sh
 
@@ -80,14 +79,17 @@ ENV PIP_NO_INPUT=1
 WORKDIR /comfyui/custom_nodes
 
 RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
-    cd ComfyUI-Impact-Pack && \
-    uv pip install -r requirements.txt
-
-RUN git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git
-RUN git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-InstantID.git
-RUN git clone https://github.com/cubiq/ComfyUI_essentials.git
-RUN git clone https://github.com/theAIGuysCode/ComfyUI-Logic.git
-RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git
+    uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
+    git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git && \
+    git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-InstantID.git && \
+    git clone https://github.com/cubiq/ComfyUI-Essentials.git && \
+    git clone https://github.com/theUpsider/ComfyUI-Logic.git && \
+    git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
+    git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
+    git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git && \
+    git clone https://github.com/melMass/comfy_mtb.git && \
+    git clone https://github.com/ltdrdata/ComfyUI-Impact-Subpack.git && \
+    git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
 
 WORKDIR /
 
@@ -108,7 +110,7 @@ RUN mkdir -p models/checkpoints models/vae models/upscale_models models/controln
 # --- Download Models ---
 
 # Main Checkpoint
-RUN wget -q -O models/checkpoints/Realistic_Freedom_Omega.safetensors https://civitai.com/api/download/models/1461059
+RUN wget -q -O "models/checkpoints/Realistic Freedom - Omega .safetensors" https://civitai.com/api/download/models/1461059
 
 # VAE
 RUN wget -q -O models/vae/sdxl_vae.safetensors https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors
@@ -118,23 +120,23 @@ RUN wget -q -O models/upscale_models/DAT_light_x3.pth https://github.com/zsyOAOA
 RUN wget -q -O models/upscale_models/x1_ITF_SkinDiffDetail_Lite_v1.pth https://huggingface.co/Acly/Omni-SR/resolve/main/ITF/x1_ITF_SkinDiffDetail_Lite_v1.pth
 
 # InstantID Models
-RUN wget -q -O models/controlnet/control_instant_id.safetensors https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/control_instant_id.safetensors
+RUN wget -q -O "models/controlnet/control instant iD.safetensors" https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/control_instant_id.safetensors
 RUN wget -q -O models/instantid/ip-adapter.bin https://huggingface.co/InstantX/InstantID/resolve/main/ip-adapter.bin
 
-# IPAdapter Plus FaceID Models
+# IPAdapter Plus FaceID Models (Updated with your links)
 RUN wget -q -O models/ipadapter/ip-adapter-faceid-plusv2_sdxl.bin https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl.bin
-RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/lora/ip-adapter-faceid-plusv2_sdxl_lora.safetensors
+RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl_lora.safetensors
 
-# CLIP Vision Model
-RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors
+# CLIP Vision Model (Updated with your link)
+RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/resolve/main/model.safetensors
 
 # InsightFace Model (for face analysis)
 RUN git clone https://huggingface.co/datasets/insightface/models models/insightface/models_repo && \
     mv models/insightface/models_repo/antelopev2 models/insightface/models/antelopev2 && \
     rm -rf models/insightface/models_repo
 
-# Impact Pack Detector Model
-RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/ltdrdata/ComfyUI-Impact-Pack/resolve/main/models/yolo/face_yolov8m.pt
+# Impact Pack Detector Model (Updated with your link)
+RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
 
 
 # Stage 3: Final image
