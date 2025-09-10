@@ -76,9 +76,13 @@ RUN chmod +x /start.sh
 ENV PIP_NO_INPUT=1
 
 # --- Install Custom Nodes ---
+
+# FIX: Disable git's interactive terminal prompt before cloning to prevent auth errors in non-interactive environments
+ENV GIT_TERMINAL_PROMPT=0
+
 WORKDIR /comfyui/custom_nodes
 
-# Step 1: Clone all repositories.
+# Step 1: Clone all repositories. This is not memory-intensive and caches well.
 RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git && \
     git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-InstantID.git && \
@@ -92,6 +96,7 @@ RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
 
 # Step 2: Install all dependencies from the requirements.txt files.
+# This is memory-intensive and is best done in a separate, combined layer.
 RUN uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
     uv pip install -r ComfyUI_IPAdapter_plus/requirements.txt && \
     uv pip install -r ComfyUI-InstantID/requirements.txt && \
