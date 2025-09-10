@@ -83,17 +83,17 @@ ENV GIT_TERMINAL_PROMPT=0
 WORKDIR /comfyui/custom_nodes
 
 # Step 1: Clone all repositories. This is not memory-intensive and caches well.
-RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
-    git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git && \
-    git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-InstantID.git && \
-    git clone https://github.com/cubiq/ComfyUI-Essentials.git && \
-    git clone https://github.com/anedsa/ComfyUI-Logic.git && \
-    git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
-    git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
-    git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git && \
-    git clone https://github.com/melMass/comfy_mtb.git && \
-    git clone https://github.com/ltdrdata/ComfyUI-Impact-Subpack.git && \
-    git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
+RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git 
+RUN git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git 
+RUN git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-InstantID.git 
+RUN git clone https://github.com/cubiq/ComfyUI-Essentials.git 
+RUN git clone https://github.com/anedsa/ComfyUI-Logic.git 
+RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git 
+RUN git clone https://github.com/kijai/ComfyUI-KJNodes.git 
+RUN git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git 
+RUN git clone https://github.com/melMass/comfy_mtb.git 
+RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Subpack.git 
+RUN git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
 
 # Step 2: Install all dependencies from the requirements.txt files.
 # This is memory-intensive and is best done in a separate, combined layer.
