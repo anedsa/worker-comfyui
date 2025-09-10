@@ -85,7 +85,7 @@ RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
 
 RUN git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git
 RUN git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-InstantID.git
-RUN git clone https://github.com/cubiq/ComfyUI-Essentials.git
+RUN git clone https://github.com/cubiq/ComfyUI_essentials.git
 RUN git clone https://github.com/theAIGuysCode/ComfyUI-Logic.git
 RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git
 
