@@ -78,8 +78,8 @@ ENV PIP_NO_INPUT=1
 # --- Install Custom Nodes ---
 WORKDIR /comfyui/custom_nodes
 
+# Step 1: Clone all repositories. This is not memory-intensive and caches well.
 RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
-    uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
     git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git && \
     git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-InstantID.git && \
     git clone https://github.com/cubiq/ComfyUI-Essentials.git && \
@@ -90,6 +90,14 @@ RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     git clone https://github.com/melMass/comfy_mtb.git && \
     git clone https://github.com/ltdrdata/ComfyUI-Impact-Subpack.git && \
     git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
+
+# Step 2: Install all dependencies from the requirements.txt files.
+# This is memory-intensive and is best done in a separate, combined layer.
+RUN uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
+    uv pip install -r ComfyUI_IPAdapter_plus/requirements.txt && \
+    uv pip install -r ComfyUI-InstantID/requirements.txt && \
+    uv pip install -r was-node-suite-comfyui/requirements.txt && \
+    uv pip install -r comfy_mtb/requirements.txt
 
 WORKDIR /
 
@@ -108,6 +116,7 @@ RUN mkdir -p models/checkpoints models/vae models/upscale_models models/controln
              models/ultralytics/bbox
 
 # --- Download Models ---
+# (Using the corrected links you provided)
 
 # Main Checkpoint
 RUN wget -q -O "models/checkpoints/Realistic Freedom - Omega .safetensors" https://civitai.com/api/download/models/1461059
@@ -123,11 +132,11 @@ RUN wget -q -O models/upscale_models/x1_ITF_SkinDiffDetail_Lite_v1.pth https://h
 RUN wget -q -O "models/controlnet/control instant iD.safetensors" https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/control_instant_id.safetensors
 RUN wget -q -O models/instantid/ip-adapter.bin https://huggingface.co/InstantX/InstantID/resolve/main/ip-adapter.bin
 
-# IPAdapter Plus FaceID Models (Updated with your links)
+# IPAdapter Plus FaceID Models
 RUN wget -q -O models/ipadapter/ip-adapter-faceid-plusv2_sdxl.bin https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl.bin
 RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl_lora.safetensors
 
-# CLIP Vision Model (Updated with your link)
+# CLIP Vision Model
 RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/resolve/main/model.safetensors
 
 # InsightFace Model (for face analysis)
@@ -135,7 +144,7 @@ RUN git clone https://huggingface.co/datasets/insightface/models models/insightf
     mv models/insightface/models_repo/antelopev2 models/insightface/models/antelopev2 && \
     rm -rf models/insightface/models_repo
 
-# Impact Pack Detector Model (Updated with your link)
+# Impact Pack Detector Model
 RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
 
 
