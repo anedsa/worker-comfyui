@@ -98,7 +98,6 @@ RUN git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
 # Step 2: Install all dependencies from the requirements.txt files.
 # This is memory-intensive and is best done in a separate, combined layer.
 RUN uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
-    uv pip install -r ComfyUI_IPAdapter_plus/requirements.txt && \
     uv pip install -r ComfyUI-InstantID/requirements.txt && \
     uv pip install -r was-node-suite-comfyui/requirements.txt && \
     uv pip install -r comfy_mtb/requirements.txt
