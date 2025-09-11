@@ -21,13 +21,14 @@ ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 
 # Install Python, git and other necessary tools
 RUN apt-get update && apt-get install -y \
-    python3.11 \
-    python3.11-venv \
+    python3.12-full \
+    python3.12-venv \
+    python3.12-dev \
     git \
     wget \
     libgl1 \
     libglib2.0-0 \
-    && ln -sf /usr/bin/python3.11 /usr/bin/python \
+    && ln -sf /usr/bin/python3.12 /usr/bin/python \
     && ln -sf /usr/bin/pip3 /usr/bin/pip
 
 # Clean up to reduce image size
