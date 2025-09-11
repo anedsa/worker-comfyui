@@ -118,17 +118,16 @@ RUN mkdir -p models/checkpoints models/vae models/upscale_models models/controln
              models/ultralytics/bbox
 
 # --- Download Models ---
-# (Using the corrected links you provided)
-
 # Main Checkpoint
-RUN wget -q -O "models/checkpoints/Realistic Freedom - Omega .safetensors" https://civitai.com/api/download/models/1461059
+# FIX: Added a User-Agent to the wget command to bypass Civitai's bot detection.
+RUN wget --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36" -q -O "models/checkpoints/Realistic Freedom - Omega .safetensors" https://civitai.com/api/download/models/1461059
 
 # VAE
 RUN wget -q -O models/vae/sdxl_vae.safetensors https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors
 
 # Upscale Models
 RUN wget -q -O models/upscale_models/DAT_light_x3.pth https://github.com/zsyOAOA/DAT/releases/download/v1.0.0/DAT_light_x3.pth
-RUN wget -q -O models/upscale_models/x1_ITF_SkinDiffDetail_Lite_v1.pth https://huggingface.co/Acly/Omni-SR/resolve/main/ITF/x1_ITF_SkinDiffDetail_Lite_v1.pth
+RUN wget -q -O models/upscale_models/x1_ITF_SkinDiffDetail_Lite__v1.pth https://huggingface.co/Acly/Omni-SR/resolve/main/ITF/x1_ITF_SkinDiffDetail_Lite_v1.pth
 
 # InstantID Models
 RUN wget -q -O "models/controlnet/control instant iD.safetensors" https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/control_instant_id.safetensors
