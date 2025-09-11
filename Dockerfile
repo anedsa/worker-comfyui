@@ -1,5 +1,6 @@
 # Build argument for base image selection
-ARG BASE_IMAGE=nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
+# UPDATED: Switched to an Ubuntu 24.04 base image which includes Python 3.12 by default.
+ARG BASE_IMAGE=nvidia/cuda:12.5.0-cudnn9-devel-ubuntu24.04
 
 # Stage 1: Base image with common dependencies
 FROM ${BASE_IMAGE} AS base
@@ -77,10 +78,7 @@ RUN chmod +x /start.sh
 ENV PIP_NO_INPUT=1
 
 # --- Install Custom Nodes ---
-
-# FIX: Disable git's interactive terminal prompt before cloning to prevent auth errors in non-interactive environments
 ENV GIT_TERMINAL_PROMPT=0
-
 WORKDIR /comfyui/custom_nodes
 
 # Step 1: Clone all repositories. This is not memory-intensive and caches well.
