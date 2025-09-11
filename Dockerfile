@@ -130,7 +130,7 @@ RUN wget -q -O models/upscale_models/DAT_light_x3.pth https://huggingface.co/jai
 RUN wget -q -O models/upscale_models/x1_ITF_SkinDiffDetail_Lite__v1.pth https://huggingface.co/datasets/mpiquero/Upscalers/resolve/main/x1_ITF_SkinDiffDetail_Lite_v1.pth
 
 # InstantID Models
-RUN wget -q -O "models/controlnet/control instant iD.safetensors" https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/control_instant_id.safetensors
+RUN wget -q -O "models/controlnet/control instant iD.safetensors" https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/diffusion_pytorch_model.safetensors
 RUN wget -q -O models/instantid/ip-adapter.bin https://huggingface.co/InstantX/InstantID/resolve/main/ip-adapter.bin
 
 # IPAdapter Plus FaceID Models
@@ -141,9 +141,9 @@ RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https
 RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/resolve/main/model.safetensors
 
 # InsightFace Model (for face analysis)
-RUN git clone https://huggingface.co/datasets/insightface/models models/insightface/models_repo && \
-    mv models/insightface/models_repo/antelopev2 models/insightface/models/antelopev2 && \
-    rm -rf models/insightface/models_repo
+#RUN git clone https://huggingface.co/datasets/insightface/models models/insightface/models_repo && \
+#    mv models/insightface/models_repo/antelopev2 models/insightface/models/antelopev2 && \
+#    rm -rf models/insightface/models_repo
 
 # Impact Pack Detector Model
 RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
