@@ -126,7 +126,7 @@ RUN wget --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537
 RUN wget -q -O models/vae/sdxl_vae.safetensors https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors
 
 # Upscale Models
-RUN wget -q -O models/upscale_models/DAT_light_x3.pth https://github.com/zsyOAOA/DAT/releases/download/v1.0.0/DAT_light_x3.pth
+RUN wget -q -O models/upscale_models/DAT_light_x3.pth https://huggingface.co/jaideepsingh/upscale_models/resolve/main/DAT/DAT_light_x3.pth?download=true
 RUN wget -q -O models/upscale_models/x1_ITF_SkinDiffDetail_Lite__v1.pth https://huggingface.co/Acly/Omni-SR/resolve/main/ITF/x1_ITF_SkinDiffDetail_Lite_v1.pth
 
 # InstantID Models
