@@ -1,6 +1,6 @@
 # Build argument for base image selection
 # UPDATED: Switched to an Ubuntu 24.04 base image which includes Python 3.12 by default.
-ARG BASE_IMAGE=nvidia/cuda:13.0.1-cudnn-devel-ubuntu24.04
+ARG BASE_IMAGE=nvidia/cuda:12.9.1-base-ubuntu24.04
 
 # Stage 1: Base image with common dependencies
 FROM ${BASE_IMAGE} AS base
