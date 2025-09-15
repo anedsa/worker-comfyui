@@ -144,12 +144,12 @@ RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https
 RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/resolve/main/model.safetensors
 
 # InsightFace Model (for face analysis)
-RUN mkdir -p models/insightface/models/antelopev2 && \
-    wget -q -O models/insightface/models/antelopev2/1k3d68.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/1k3d68.onnx && \
-    wget -q -O models/insightface/models/antelopev2/2d106det.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/2d106det.onnx && \
-    wget -q -O models/insightface/models/antelopev2/genderage.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/genderage.onnx && \
-    wget -q -O models/insightface/models/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx && \
-    wget -q -O models/insightface/models/antelopev2/scrfd_10g_bnkps.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/scrfd_10g_bnkps.onnx
+#RUN mkdir -p models/insightface/models/antelopev2 && \
+#    wget -q -O models/insightface/models/antelopev2/1k3d68.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/1k3d68.onnx && \
+#    wget -q -O models/insightface/models/antelopev2/2d106det.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/2d106det.onnx && \
+#    wget -q -O models/insightface/models/antelopev2/genderage.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/genderage.onnx && \
+#    wget -q -O models/insightface/models/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx && \
+#    wget -q -O models/insightface/models/antelopev2/scrfd_10g_bnkps.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/scrfd_10g_bnkps.onnx
 
 # Impact Pack Detector Model
 RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
