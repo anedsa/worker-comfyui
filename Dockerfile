@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
     g++ \
+    ffmpeg \
     && ln -sf /usr/bin/python3.12 /usr/bin/python \
     && ln -sf /usr/bin/pip3 /usr/bin/pip \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
@@ -99,11 +100,13 @@ RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
 
 # Step 2: Pin setuptools and numpy, then install dependencies
 RUN uv pip install setuptools==60.10.0
-RUN uv pip install numpy==2.3.3
-RUN uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
+    uv pip install ffmpeg-python
+    uv pip install numpy==2.3.3
+    uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
     uv pip install -r ComfyUI-InstantID/requirements.txt && \
     uv pip install -r was-node-suite-comfyui/requirements.txt && \
     uv pip install -r comfy_mtb/requirements.txt
+
 
 WORKDIR /
 
