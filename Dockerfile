@@ -1,5 +1,4 @@
 # Build argument for base image selection
-# UPDATED: Switched to an Ubuntu 24.04 base image which includes Python 3.12 by default.
 ARG BASE_IMAGE=nvidia/cuda:13.0.1-cudnn-runtime-ubuntu24.04
 
 # Stage 1: Base image with common dependencies
@@ -7,9 +6,9 @@ FROM ${BASE_IMAGE} AS base
 
 # Build arguments for this stage with sensible defaults for standalone builds
 ARG COMFYUI_VERSION=latest
-ARG CUDA_VERSION_FOR_COMFY
-ARG ENABLE_PYTORCH_UPGRADE=false
-ARG PYTORCH_INDEX_URL
+ARG CUDA_VERSION_FOR_COMFY=13.0
+ARG ENABLE_PYTORCH_UPGRADE=true
+ARG PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -20,7 +19,7 @@ ENV PYTHONUNBUFFERED=1
 # Speed up some cmake builds
 ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 
-# Install Python, git and other necessary tools
+# Install Python, git, build tools, and other necessary tools
 RUN apt-get update && apt-get install -y \
     python3.12 \
     python3.12-venv \
@@ -29,11 +28,15 @@ RUN apt-get update && apt-get install -y \
     wget \
     libgl1 \
     libglib2.0-0 \
+    build-essential \
+    gcc \
+    g++ \
     && ln -sf /usr/bin/python3.12 /usr/bin/python \
-    && ln -sf /usr/bin/pip3 /usr/bin/pip
+    && ln -sf /usr/bin/pip3 /usr/bin/pip \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-# Clean up to reduce image size
-RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+# Verify git is available
+RUN which git
 
 # Install uv (latest) using official installer and create isolated venv
 RUN wget -qO- https://astral.sh/uv/install.sh | sh \
@@ -94,8 +97,9 @@ RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     git clone https://github.com/ltdrdata/ComfyUI-Impact-Subpack.git && \
     git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
 
-# Step 2: Install all dependencies from the requirements.txt files.
-# This is memory-intensive and is best done in a separate, combined layer.
+# Step 2: Pin setuptools and numpy, then install dependencies
+RUN uv pip install setuptools==60.10.0
+RUN uv pip install numpy==2.3.3
 RUN uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
     uv pip install -r ComfyUI-InstantID/requirements.txt && \
     uv pip install -r was-node-suite-comfyui/requirements.txt && \
@@ -119,7 +123,6 @@ RUN mkdir -p models/checkpoints models/vae models/upscale_models models/controln
 
 # --- Download Models ---
 # Main Checkpoint
-# FIX: Added a User-Agent to the wget command to bypass Civitai's bot detection.
 RUN wget --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36" -q -O "models/checkpoints/Realistic Freedom - Omega .safetensors" https://civitai.com/api/download/models/1461059
 
 # VAE
@@ -141,13 +144,15 @@ RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https
 RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/resolve/main/model.safetensors
 
 # InsightFace Model (for face analysis)
-#RUN git clone https://huggingface.co/datasets/insightface/models models/insightface/models_repo && \
-#    mv models/insightface/models_repo/antelopev2 models/insightface/models/antelopev2 && \
-#    rm -rf models/insightface/models_repo
+RUN mkdir -p models/insightface/models/antelopev2 && \
+    wget -q -O models/insightface/models/antelopev2/1k3d68.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/1k3d68.onnx && \
+    wget -q -O models/insightface/models/antelopev2/2d106det.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/2d106det.onnx && \
+    wget -q -O models/insightface/models/antelopev2/genderage.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/genderage.onnx && \
+    wget -q -O models/insightface/models/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx && \
+    wget -q -O models/insightface/models/antelopev2/scrfd_10g_bnkps.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/scrfd_10g_bnkps.onnx
 
 # Impact Pack Detector Model
 RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
-
 
 # Stage 3: Final image
 FROM base AS final
