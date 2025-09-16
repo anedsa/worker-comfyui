@@ -159,8 +159,7 @@ RUN mkdir -p models/insightface/models/antelopev2 && \
     wget -q -O models/insightface/models/antelopev2/scrfd_10g_bnkps.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/scrfd_10g_bnkps.onnx
 
 # Impact Pack Detector Model
-RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt && \
-    wget -q -O models/ultralytics/bbox/face_yolov8n.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8n.pt && \
+RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
 
 # Stage 3: Final image
 FROM base AS final
