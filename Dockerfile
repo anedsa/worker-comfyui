@@ -19,7 +19,7 @@ ENV PYTHONUNBUFFERED=1
 # Speed up some cmake builds
 ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 
-# Install Python, git, build tools, and other necessary tools
+# Install Python, git, build tools, FFmpeg, and required libraries
 RUN apt-get update && apt-get install -y \
     python3.12 \
     python3.12-venv \
@@ -32,12 +32,16 @@ RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     ffmpeg \
+    libavcodec-dev \
+    libavformat-dev \
+    libavutil-dev \
+    libswscale-dev \
     && ln -sf /usr/bin/python3.12 /usr/bin/python \
     && ln -sf /usr/bin/pip3 /usr/bin/pip \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-# Verify git is available
-RUN which git
+# Verify git and ffmpeg are available
+RUN which git && which ffmpeg
 
 # Install uv (latest) using official installer and create isolated venv
 RUN wget -qO- https://astral.sh/uv/install.sh | sh \
@@ -71,8 +75,8 @@ ADD src/extra_model_paths.yaml ./
 # Go back to the root
 WORKDIR /
 
-# Install Python runtime dependencies for the handler
-RUN uv pip install runpod requests websocket-client
+# Install Python runtime dependencies for the handler and ultralytics
+RUN uv pip install runpod requests websocket-client ultralytics
 
 # Add application code and scripts
 ADD src/start.sh handler.py workflow_api.json ./
@@ -90,8 +94,9 @@ ENV PIP_NO_INPUT=1
 COPY scripts/comfy-manager-set-mode.sh /usr/local/bin/comfy-manager-set-mode
 RUN chmod +x /usr/local/bin/comfy-manager-set-mode
 
-# Step 1: Clone all repositories. This is not memory-intensive and caches well.
+# Step 1: Clone all repositories with specific versions where applicable
 RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
+    cd ComfyUI-Impact-Pack && git checkout v8.22.2 && cd .. && \
     git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git && \
     git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-InstantID.git && \
     git clone https://github.com/cubiq/ComfyUI_essentials.git && \
@@ -99,14 +104,16 @@ RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git && \
+    cd ComfyUI_Comfyroll_CustomNodes && git checkout v1.76 && cd .. && \
     git clone https://github.com/melMass/comfy_mtb.git && \
     git clone https://github.com/ltdrdata/ComfyUI-Impact-Subpack.git && \
     git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
 
-# Step 2: Pin setuptools and numpy, then install dependencies
+# Step 2: Install dependencies with more flexible numpy version
 RUN uv pip install setuptools==60.10.0 && \
     uv pip install ffmpeg-python && \
-    uv pip install numpy==2.3.3 && \
+    uv pip install numpy>=1.26.0,<2.4.0 && \
+    uv pip install ultralytics && \
     uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
     uv pip install -r ComfyUI-InstantID/requirements.txt && \
     uv pip install -r was-node-suite-comfyui/requirements.txt && \
@@ -125,7 +132,7 @@ WORKDIR /comfyui
 
 # Create necessary directories upfront
 RUN mkdir -p models/checkpoints models/vae models/upscale_models models/controlnet \
-             models/ipadapter models/instantid models/clip_vision models/insightface models/loras \
+             models/ipadapter models/instantid models/clip_vision models/insightface/models/antelopev2 models/loras \
              models/ultralytics/bbox
 
 # --- Download Models ---
@@ -151,12 +158,10 @@ RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https
 RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/resolve/main/model.safetensors
 
 # InsightFace Model (for face analysis)
-#RUN mkdir -p models/insightface/models/antelopev2 && \
-#    wget -q -O models/insightface/models/antelopev2/1k3d68.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/1k3d68.onnx && \
-#    wget -q -O models/insightface/models/antelopev2/2d106det.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/2d106det.onnx && \
-#   wget -q -O models/insightface/models/antelopev2/genderage.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/genderage.onnx && \
-#   wget -q -O models/insightface/models/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx && \
-#   wget -q -O models/insightface/models/antelopev2/scrfd_10g_bnkps.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/scrfd_10g_bnkps.onnx
+RUN cd models/insightface/models/antelopev2 && \
+    wget -q -O antelopev2.zip https://github.com/deepinsight/insightface/releases/download/v0.7/antelopev2.zip && \
+    unzip -q antelopev2.zip && \
+    rm antelopev2.zip
 
 # Impact Pack Detector Model
 RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
