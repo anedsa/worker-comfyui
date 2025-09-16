@@ -6,9 +6,9 @@ FROM ${BASE_IMAGE} AS base
 
 # Build arguments for this stage with sensible defaults for standalone builds
 ARG COMFYUI_VERSION=latest
-ARG CUDA_VERSION_FOR_COMFY
-ARG ENABLE_PYTORCH_UPGRADE=false
-ARG PYTORCH_INDEX_URL
+ARG CUDA_VERSION_FOR_COMFY=12.6
+ARG ENABLE_PYTORCH_UPGRADE=true
+ARG PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cu126
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -104,14 +104,13 @@ RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     git clone https://github.com/ltdrdata/was-node-suite-comfyui.git
 
 # Step 2: Pin setuptools and numpy, then install dependencies
-RUN uv pip install setuptools==60.10.0
-    uv pip install ffmpeg-python
-    uv pip install numpy==2.3.3
+RUN uv pip install setuptools==60.10.0 && \
+    uv pip install ffmpeg-python && \
+    uv pip install numpy==2.3.3 && \
     uv pip install -r ComfyUI-Impact-Pack/requirements.txt && \
     uv pip install -r ComfyUI-InstantID/requirements.txt && \
     uv pip install -r was-node-suite-comfyui/requirements.txt && \
     uv pip install -r comfy_mtb/requirements.txt
-
 
 WORKDIR /
 
@@ -152,15 +151,16 @@ RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https
 RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/resolve/main/model.safetensors
 
 # InsightFace Model (for face analysis)
-#RUN mkdir -p models/insightface/models/antelopev2 && \
-#    wget -q -O models/insightface/models/antelopev2/1k3d68.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/1k3d68.onnx && \
-#    wget -q -O models/insightface/models/antelopev2/2d106det.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/2d106det.onnx && \
-#    wget -q -O models/insightface/models/antelopev2/genderage.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/genderage.onnx && \
-#    wget -q -O models/insightface/models/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx && \
-#    wget -q -O models/insightface/models/antelopev2/scrfd_10g_bnkps.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/scrfd_10g_bnkps.onnx
+RUN mkdir -p models/insightface/models/antelopev2 && \
+    wget -q -O models/insightface/models/antelopev2/1k3d68.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/1k3d68.onnx && \
+    wget -q -O models/insightface/models/antelopev2/2d106det.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/2d106det.onnx && \
+    wget -q -O models/insightface/models/antelopev2/genderage.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/genderage.onnx && \
+    wget -q -O models/insightface/models/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/glint360k_cosface_r18_fp16_0.1.onnx && \
+    wget -q -O models/insightface/models/antelopev2/scrfd_10g_bnkps.onnx https://huggingface.co/datasets/insightface/models/resolve/main/antelopev2/scrfd_10g_bnkps.onnx
 
 # Impact Pack Detector Model
-RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
+RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt && \
+    wget -q -O models/ultralytics/bbox/face_yolov8n.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8n.pt && \
 
 # Stage 3: Final image
 FROM base AS final
