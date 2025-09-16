@@ -79,11 +79,16 @@ ADD src/start.sh handler.py workflow_api.json ./
 RUN chmod +x /start.sh
 
 # Prevent pip from asking for confirmation during uninstall steps in custom nodes
+# Add script to install custom nodes
+COPY scripts/comfy-node-install.sh /usr/local/bin/comfy-node-install
+RUN chmod +x /usr/local/bin/comfy-node-install
+
+# Prevent pip from asking for confirmation during uninstall steps in custom nodes
 ENV PIP_NO_INPUT=1
 
-# --- Install Custom Nodes ---
-ENV GIT_TERMINAL_PROMPT=0
-WORKDIR /comfyui/custom_nodes
+# Copy helper script to switch Manager network mode at container start
+COPY scripts/comfy-manager-set-mode.sh /usr/local/bin/comfy-manager-set-mode
+RUN chmod +x /usr/local/bin/comfy-manager-set-mode
 
 # Step 1: Clone all repositories. This is not memory-intensive and caches well.
 RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
