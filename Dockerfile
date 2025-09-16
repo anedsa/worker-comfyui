@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     ffmpeg \
+    unzip \
     libavcodec-dev \
     libavformat-dev \
     libavutil-dev \
