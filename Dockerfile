@@ -119,6 +119,7 @@ RUN uv pip install setuptools==60.10.0 && \
     uv pip install -r ComfyUI-InstantID/requirements.txt && \
     uv pip install -r was-node-suite-comfyui/requirements.txt && \
     uv pip install -r comfy_mtb/requirements.txt
+    uv pip install -r ComfyUI-KJNodes/requirements.txt
 
 WORKDIR /
 
