@@ -106,41 +106,10 @@ ARG HUGGINGFACE_ACCESS_TOKEN
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 
-# Create necessary directories upfront
-RUN mkdir -p models/checkpoints models/vae models/upscale_models models/controlnet \
-             models/ipadapter models/instantid models/clip_vision models/insightface/models/antelopev2 models/loras \
-             models/ultralytics/bbox
+RUN comfy-node-install comfyui-kjnodes comfyui-impact-pack comfyui-logic comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
+RUN cd custom_nodes
+RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui
 
-# --- Download Models ---
-# Main Checkpoint
-RUN wget --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36" -q -O "models/checkpoints/Realistic Freedom - Omega .safetensors" https://civitai.com/api/download/models/1461059
-
-# VAE
-RUN wget -q -O models/vae/sdxl_vae.safetensors https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors
-
-# Upscale Models
-RUN wget -q -O models/upscale_models/DAT_light_x3.pth https://huggingface.co/jaideepsingh/upscale_models/resolve/main/DAT/DAT_light_x3.pth?download=true
-RUN wget -q -O models/upscale_models/x1_ITF_SkinDiffDetail_Lite__v1.pth https://huggingface.co/datasets/mpiquero/Upscalers/resolve/main/x1_ITF_SkinDiffDetail_Lite_v1.pth
-
-# InstantID Models
-RUN wget -q -O "models/controlnet/control instant iD.safetensors" https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/diffusion_pytorch_model.safetensors
-RUN wget -q -O models/instantid/ip-adapter.bin https://huggingface.co/InstantX/InstantID/resolve/main/ip-adapter.bin
-
-# IPAdapter Plus FaceID Models
-RUN wget -q -O models/ipadapter/ip-adapter-faceid-plusv2_sdxl.bin https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl.bin
-RUN wget -q -O models/loras/ip-adapter-faceid-plusv2_sdxl_lora.safetensors https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl_lora.safetensors
-
-# CLIP Vision Model
-RUN wget -q -O models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/resolve/main/model.safetensors
-
-# InsightFace Model (for face analysis)
-RUN cd models/insightface/models/antelopev2 && \
-    wget -q -O antelopev2.zip https://github.com/deepinsight/insightface/releases/download/v0.7/antelopev2.zip && \
-    unzip -q antelopev2.zip && \
-    rm antelopev2.zip
-
-# Impact Pack Detector Model
-RUN wget -q -O models/ultralytics/bbox/face_yolov8m.pt https://huggingface.co/Ultralytics/YOLOv8/resolve/main/yolov8m.pt
 # Stage 3: Final image
 FROM base AS final
 
