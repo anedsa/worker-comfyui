@@ -108,11 +108,12 @@ RUN comfy-node-install comfyui-kjnodes comfyui-impact-pack comfyui-logic comfyui
 WORKDIR /comfyui
 
 RUN cd custom_nodes
-RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui
+RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui && \
+    git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes
 
 # Stage 3: Final image
 FROM base AS final
 
 # Copy models from stage 2 to the final image
 COPY --from=downloader /comfyui/models /comfyui/models
- 
+COPY --from=downloader /comfyui/custom_nodes /comfyui/custom_nodes
