@@ -138,8 +138,7 @@ RUN mkdir -p models/checkpoints models/vae models/upscale_models models/controln
 
 # --- Download Models ---
 # Main Checkpoint
-RUN wget --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36" -q -O "models/checkpoints/Realistic Freedom - Omega .safetensors" https://civitai.com/api/download/models/1461059
-
+RUN curl -L -o model.safetensors -H "Authorization: Bearer 08a83f5407e10d25414e395fbda8bda7 " "https://civitai.com/api/download/models/1461059"
 # VAE
 RUN wget -q -O models/vae/sdxl_vae.safetensors https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors
 
