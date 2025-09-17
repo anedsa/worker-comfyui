@@ -1,5 +1,5 @@
 # Build argument for base image selection
-ARG BASE_IMAGE=worker-comfyui:5.4.1-base
+ARG BASE_IMAGE=runpod/worker-comfyui:5.4.1-base
 
 # Stage 1: Base image with common dependencies
 FROM ${BASE_IMAGE}
