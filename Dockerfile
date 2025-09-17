@@ -66,6 +66,8 @@ RUN if [ -n "${CUDA_VERSION_FOR_COMFY}" ]; then \
 RUN if [ "$ENABLE_PYTORCH_UPGRADE" = "true" ]; then \
       uv pip install --force-reinstall torch torchvision torchaudio --index-url ${PYTORCH_INDEX_URL}; \
     fi
+    
+RUN comfy-node-install comfyui-kjnodes comfyui-impact-pack comfyui-logic comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
@@ -103,11 +105,8 @@ FROM base AS downloader
 ARG HUGGINGFACE_ACCESS_TOKEN
 # Set default model type if none is provided
 
-RUN comfy-node-install comfyui-kjnodes comfyui-impact-pack comfyui-logic comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
 # Change working directory to ComfyUI
-WORKDIR /comfyui
-
-RUN cd custom_nodes
+WORKDIR /comfyui/custom_nodes
 RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes
 
@@ -116,5 +115,4 @@ FROM base AS final
 
 # Copy models from stage 2 to the final image
 COPY --from=downloader /comfyui/models /comfyui/models
-COPY --from=downloader /comfyui/custom_nodes /comfyui/custom_nodes
 
