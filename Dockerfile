@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
 # Clean up to reduce image size
 RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
     
-RUN comfy-node-install comfyui-kjnodes comfyui-impact-pack comfyui-logic comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
+RUN comfy node install comfyui-kjnodes comfyui-impact-pack comfyui-logic comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
