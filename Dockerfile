@@ -30,11 +30,15 @@ RUN pip install --no-cache-dir opencv-python-headless numba requirements-parser
 
 RUN comfy node install comfyui-kjnodes comfyui-impact-pack comfyui-logic comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
 
+#Change working directory to ComfyUI
+
+WORKDIR /comfyui/custom_nodes
+
+RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
+    git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git
+
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
-# Change working directory to ComfyUI
-#WORKDIR /comfyui/custom_nodes
-#RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui && \
-#    git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes
+
