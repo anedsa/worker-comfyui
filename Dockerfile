@@ -1,5 +1,5 @@
 # Build argument for base image selection
-ARG BASE_IMAGE=runpod/worker-comfyui:5.3.0-base-cuda12.8.1
+ARG BASE_IMAGE=runpod/worker-comfyui:5.4.1-base
 # Stage 1: Base image with common dependencies
 FROM ${BASE_IMAGE}
 # Install Python, git and other necessary tools
@@ -28,13 +28,14 @@ RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir opencv-python-headless numba requirements-parser
 
-RUN comfy node install comfyui-kjnodes comfyui-impact-pack comfyui-logic comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
+RUN comfy node install comfyui-kjnodes comfyui-impact-pack comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
 
 #Change working directory to ComfyUI
 
 WORKDIR /comfyui/custom_nodes
 
 RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
+    git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git
 
 # Change working directory to ComfyUI
