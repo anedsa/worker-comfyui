@@ -28,7 +28,7 @@ RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir opencv-python-headless numba requirements-parser
 
-RUN comfy node install comfyui-kjnodes comfyui-impact-pack comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns
+RUN comfy node install comfyui-kjnodes comfyui-impact-pack comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns comfyui-tooling-nodes
 
 #Change working directory to ComfyUI
 
