@@ -40,5 +40,11 @@ RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
+
+RUN mkdir -p models/insightface/models/antelopev2 && \
+    cd models/insightface/models/antelopev2 && \
+    wget -q -O antelopev2.zip https://github.com/deepinsight/insightface/releases/download/v0.7/antelopev2.zip && \
+    unzip -q antelopev2.zip && \
+    rm antelopev2.zip
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
