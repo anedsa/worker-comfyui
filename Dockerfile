@@ -36,7 +36,7 @@ WORKDIR /comfyui/custom_nodes
 
 RUN git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git && \
-    git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git
+    git clone https://github.com/anedsa/ComfyUI-Logic.git
 
 # Change working directory to ComfyUI
 WORKDIR /comfyui
