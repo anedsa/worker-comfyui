@@ -12,4 +12,3 @@ runpod_worker_comfy:
   unet: models/unet/
   ipadapter: models/ipadapter/
   instantid: models/instantid/
-  insightface: models/insightface/
