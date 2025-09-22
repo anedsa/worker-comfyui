@@ -45,6 +45,12 @@ RUN mkdir -p models/insightface/models/antelopev2 && \
     cd models/insightface/models/antelopev2 && \
     wget -q -O antelopev2.zip https://github.com/deepinsight/insightface/releases/download/v0.7/antelopev2.zip && \
     unzip -q antelopev2.zip && \
-    rm antelopev2.zip
+    rm antelopev2.zip && \
+    mkdir -p models/insightface/models/buuffalo_l && \
+    cd models/insightface/models/buffalo_l && \
+    wget -q -O antelopev2.zip https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip && \
+    unzip -q buffalo_l.zip && \
+    rm buffalo_l.zip
+
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
