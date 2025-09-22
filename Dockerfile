@@ -48,7 +48,7 @@ RUN mkdir -p models/insightface/models/antelopev2 && \
     rm antelopev2.zip && \
     mkdir -p models/insightface/models/buffalo_l && \
     cd models/insightface/models/buffalo_l && \
-    wget -q -O antelopev2.zip https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip && \
+    wget -q https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip && \
     unzip -q buffalo_l.zip && \
     rm buffalo_l.zip
 
