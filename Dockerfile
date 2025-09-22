@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir opencv-python-headless numba requirements-parser
+RUN pip install --no-cache-dir opencv-python-headless numba requirements-parser insightface==0.7.3 onnxruntime-gpu
 
 RUN comfy node install comfyui-kjnodes comfyui-impact-pack comfyui_essentials comfy-mtb comfyui_instantid comfyui_ipadapter_plus comfyui-impact-subpack was-ns comfyui-tooling-nodes
 
@@ -50,7 +50,8 @@ RUN mkdir -p models/insightface/models/antelopev2 && \
     cd models/insightface/models/buffalo_l && \
     wget -q https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip && \
     unzip -q buffalo_l.zip && \
-    rm buffalo_l.zip
+    rm buffalo_l.zip && \
+    chmod -R 755 /comfyui/models/insightface
 
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
