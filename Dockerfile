@@ -54,4 +54,3 @@ RUN mkdir -p models/insightface/models/antelopev2 && \
 
 # Support for the network volume
 ADD src/extra_model_paths.yaml ./
-
