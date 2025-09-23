@@ -118,4 +118,3 @@ WORKDIR /
 
 # Set the default command to run when starting the container
 CMD ["/start.sh"]
-
