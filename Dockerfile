@@ -97,7 +97,7 @@ WORKDIR /
 RUN uv pip install runpod requests websocket-client ultralytics
 
 # Add application code and scripts
-ADD src/start.sh handler.py workflow_api.json ./
+ADD src/start.sh handler.py ./
 RUN chmod +x /start.sh
 
 # Prevent pip from asking for confirmation during uninstall steps in custom nodes
